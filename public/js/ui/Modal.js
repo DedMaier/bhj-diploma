@@ -1,23 +1,22 @@
+'use strict'
 /**
  * Класс Modal отвечает за
  * управление всплывающими окнами.
  * В первую очередь это открытие или
  * закрытие имеющихся окон
  * */
- class Modal {
+class Modal {
   /**
    * Устанавливает текущий элемент в свойство element
-   * Регистрирует обработчики событий с помощью Modal.registerEvents()
+   * Регистрирует обработчики событий с помощью
+   * AccountsWidget.registerEvents()
    * Если переданный элемент не существует,
    * необходимо выкинуть ошибку.
    * */
-  constructor(element) {
-    if (!element) {
-      throw new Error('Параметр element класса Modal не задан');
-    }
-    this.element = element;
+  constructor( element ) {
 
-    this.registerEvents();
+    if ( !element ) throw new Error( 'Element not found' );
+    this.element = element;
   }
 
   /**
@@ -26,13 +25,8 @@
    * (с помощью метода Modal.onClose)
    * */
   registerEvents() {
-    const closeTriggers = this.element.querySelectorAll('[data-dismiss="modal"]');
-
-    for (const closeTrigger of closeTriggers) {
-      closeTrigger.onclick = () => {
-        this.onClose();
-      }
-    }
+    this.dismiss = [...this.element.querySelectorAll( 'button[data-dismiss="modal"]' )];
+    this.dismiss.map( element => element.onclick = this.onClose.bind( this ));
   }
 
   /**
@@ -41,20 +35,26 @@
    * */
   onClose() {
     this.close();
+    this.unregisterEvents();
   }
-
+  /**
+   * Удаляет обработчики событий
+   * */
+  unregisterEvents() {
+    this.dismiss.map( element => element.onclick = '' );
+  }
   /**
    * Открывает окно: устанавливает CSS-свойство display
    * со значением «block»
    * */
   open() {
+    this.registerEvents();
     this.element.style.display = 'block';
   }
-
   /**
    * Закрывает окно: удаляет CSS-свойство display
    * */
   close() {
-    this.element.style.removeProperty('display');
+    this.element.style.display = 'none';
   }
 }
