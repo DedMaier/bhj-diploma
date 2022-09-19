@@ -1,21 +1,18 @@
+'use strict'
 /**
  * Класс UserWidget отвечает за
  * отображение информации о имени пользователя
  * после авторизации или его выхода из системы
  * */
-
- class UserWidget {
+class UserWidget extends BaseWidget {
   /**
    * Устанавливает полученный элемент
    * в свойство element.
    * Если переданный элемент не существует,
    * необходимо выкинуть ошибку.
    * */
-  constructor(element) {
-    if (!element) {
-      throw new Error('Параметр element класса UserWidget не задан');
-    }
-    this.element = element;
+  constructor( element ) {
+    super (element);
   }
 
   /**
@@ -26,11 +23,10 @@
    * авторизованного пользователя
    * */
   update() {
-    const name = User.current().name;
-
-    if (name) {
-      const nameBox = this.element.querySelector('.user-name');
-      nameBox.textContent = name;
+    const current = User.current();
+    if (current) {
+      this.element.querySelector('.user-name')
+      .textContent = current.name;
     }
   }
 }
