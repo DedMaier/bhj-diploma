@@ -1,25 +1,25 @@
-'use strict'
 /**
  * Класс CreateAccountForm управляет формой
  * создания нового счёта
- * Наследуется от AsyncForm
  * */
-class CreateAccountForm extends AsyncForm {
+ class CreateAccountForm extends AsyncForm {
   /**
    * Создаёт счёт с помощью Account.create и закрывает
-   * окно (в котором находится форма) в случае успеха,
-   * а также вызывает App.update()
+   * окно в случае успеха, а также вызывает App.update()
    * и сбрасывает форму
    * */
-  constructor( element ) {
-    super ( element );
-  }
-  
-  onSubmit( options ) {
-    Account.create( options, () => {
-      this.element.reset();
-      App.getModal( 'createAccount' ).close();
-      App.update();
-    });
+  onSubmit(data) {
+    const callback = (error) => {
+      if (error) {
+        handleError(error);
+      } else {
+        this.element.reset();
+        App.getModal('createAccount').close();
+        App.getWidget("accounts").update();
+        App.updateForms();
+      }
+    }
+
+    Account.create(data, callback);
   }
 }

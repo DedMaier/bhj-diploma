@@ -1,19 +1,24 @@
-'use strict'
 /**
  * Класс Entity - базовый для взаимодействия с сервером.
  * Имеет свойство URL, равно пустой строке.
  * */
-class Entity {
-  
-  static URL = '';
+ class Entity {
+  static get URL() {
+    return '';
+  }
 
   /**
    * Запрашивает с сервера список данных.
    * Это могут быть счета или доходы/расходы
    * (в зависимости от того, что наследуется от Entity)
    * */
-  static list( data, callback = f => f ) {
-    return createRequest({ method: 'GET', URL: this.URL, body: data }, callback );
+  static list(data, callback) {
+    createRequest({
+      url: this.URL + `?account_id=${data}`,
+      responseType: 'json',
+      method: 'GET',
+      callback: callback
+    });
   }
 
   /**
@@ -21,25 +26,27 @@ class Entity {
    * на сервер. (в зависимости от того,
    * что наследуется от Entity)
    * */
-  static create( data, callback = f => f ) {
-    data.append( '_method', 'PUT' )
-    return createRequest({ method: 'POST', URL: this.URL, body: data }, callback );
-  }
-
-  /**
-   * Получает информацию о счёте или доходе/расходе
-   * (в зависимости от того, что наследуется от Entity)
-   * */
-  static get( id = '', data, callback = f => f ) {
-    return createRequest({ method: 'GET', URL: this.URL, body: data }, callback );
+  static create(data, callback) {
+    createRequest({
+      url: this.URL,
+      data: data,
+      responseType: 'json',
+      method: 'PUT',
+      callback: callback
+    });
   }
 
   /**
    * Удаляет информацию о счёте или доходе/расходе
    * (в зависимости от того, что наследуется от Entity)
    * */
-  static remove( id = '', data, callback = f => f ) {
-    data.append( '_method', 'DELETE' );
-    return createRequest({ method: 'POST', URL: this.URL, body: data }, callback )
+  static remove(data, callback) {
+    createRequest({
+      url: this.URL,
+      data: data,
+      responseType: 'json',
+      method: 'DELETE',
+      callback: callback
+    });
   }
 }
