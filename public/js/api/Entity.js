@@ -12,9 +12,11 @@
    * Это могут быть счета или доходы/расходы
    * (в зависимости от того, что наследуется от Entity)
    * */
-  static list(data, callback) {
+   static list(data, callback) {
     createRequest({
-      url: this.URL + `?account_id=${data}`,
+      /*url: this.URL + `?account_id=${data}`, - Исправил*/
+      url: this.URL,  
+      data: data, 
       responseType: 'json',
       method: 'GET',
       callback: callback
