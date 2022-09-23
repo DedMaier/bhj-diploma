@@ -14,7 +14,7 @@
    * */
    static list(data, callback) {
     createRequest({
-      /*url: this.URL + `?account_id=${data}`, - Исправил*/
+      /*url: this.URL + `/account_id=${data}`, - Исправил*/
       url: this.URL,  
       data: data, 
       responseType: 'json',
